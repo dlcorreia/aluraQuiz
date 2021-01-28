@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import Head from 'next/head';
 import db from '../db.json';
 import Widget from '../src/components/Widget';
 import QuizBackground from '../src/components/QuizBackground';
@@ -25,28 +27,31 @@ export const QuizContainer = styled.div`
 
 export default function Home() {
   return (
-      <QuizBackground backgroundImage={db.bg}>
-          <QuizContainer>
-            <Widget>
-                <Widget.Header>
-                    <h1>Título do Quiz</h1>
-                </Widget.Header>
-                <Widget.Content>
-                    <p>Aqui vem a explicação...</p>
-                </Widget.Content>
-            </Widget>
-            <Widget>
-                <Widget.Header>
-                    <h1>Outros Quizes</h1>
+    <QuizBackground backgroundImage={db.bg}>
+      <Head>
+        <title>Meu quiz</title>
+      </Head>
+      <QuizContainer>
+        <Widget>
+          <Widget.Header>
+            <h1>Título do Quiz</h1>
+          </Widget.Header>
+          <Widget.Content>
+            <p>Aqui vem a explicação...</p>
+          </Widget.Content>
+        </Widget>
+        <Widget>
+          <Widget.Header>
+            <h1>Outros Quizes</h1>
 
-                </Widget.Header>
-                <Widget.Content>
-                    <p>Aqui vem a explicação...</p>
-                </Widget.Content>
-            </Widget>
-            <Footer />
-          </QuizContainer>
-          <GitHubCorner projectUrl="https://github.com/dlcorreia/aluraQuiz" />
-      </QuizBackground> 
-  )
+          </Widget.Header>
+          <Widget.Content>
+            <p>Aqui vem a explicação...</p>
+          </Widget.Content>
+        </Widget>
+        <Footer />
+      </QuizContainer>
+      <GitHubCorner projectUrl="https://github.com/dlcorreia/aluraQuiz" />
+    </QuizBackground>
+  );
 }
