@@ -26,6 +26,7 @@ function QuestionWidget({
   question,
   questionIndex,
   totalQuestions,
+  onSubmit,
 }) {
   const questionId = `question_${questionIndex}`;
   return (
@@ -53,7 +54,12 @@ function QuestionWidget({
         <p>
           {question.description}
         </p>
-        <form>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmit();
+          }}
+        >
           {question.alternatives.map((alternative, alternativeIndex) => {
             const alternativeId = `alternative_${alternativeIndex}`;
             return (
@@ -79,11 +85,37 @@ function QuestionWidget({
   );
 }
 
+const screenStates = {
+  QUIZ: 'QUIZ',
+  LOADING: 'LOADING',
+  RESULT: 'RESULT',
+};
+
 export default function QuizPage() {
-  const screenState = "LOADING";
+  const [screenState, setScreenState] = React.useState(screenStates.LOADING);
   const totalQuestions = db.questions.length;
-  const questionIndex = 0;
+  const [questionIndex, setQuestionIndex] = React.useState(0);
   const question = db.questions[questionIndex];
+
+  // nasce === didMount
+  // atualizado === willUpdate
+  // morre === willUnmount
+  // React.useEffect
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setScreenState(screenStates.QUIZ);
+    }, 1 * 1000);
+  }, []);
+
+  function handleSubmitQuiz() {
+    const nextQuestion = questionIndex + 1;
+    if (nextQuestion < totalQuestions) {
+      setQuestionIndex(questionIndex + 1);
+    } else {
+      setScreenState(screenStates.RESULT);
+    }
+  }
   return (
     <QuizBackground backgroundImage={db.bg}>
       <Head>
@@ -91,17 +123,18 @@ export default function QuizPage() {
       </Head>
       <QuizContainer>
 
-        {screenState === 'QUIZ' && (
+        {screenState === screenStates.QUIZ && (
           <QuestionWidget
             question={question}
             questionIndex={questionIndex}
             totalQuestions={totalQuestions}
+            onSubmit={handleSubmitQuiz}
           />
         )}
 
-        {screenState === 'LOADING' && <LoadingWidget />}
+        {screenState === screenStates.LOADING && <LoadingWidget />}
 
-        {screenState === 'RESULT' && <div>Parabéns, você acertou X questões!</div>}
+        {screenState === screenStates.RESULT && <div>Parabéns, você acertou X questões!</div>}
 
       </QuizContainer>
     </QuizBackground>
