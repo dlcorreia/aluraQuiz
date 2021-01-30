@@ -111,11 +111,12 @@ export default function QuizPage() {
   function handleSubmitQuiz() {
     const nextQuestion = questionIndex + 1;
     if (nextQuestion < totalQuestions) {
-      setQuestionIndex(questionIndex + 1);
+      setQuestionIndex(nextQuestion);
     } else {
       setScreenState(screenStates.RESULT);
     }
   }
+
   return (
     <QuizBackground backgroundImage={db.bg}>
       <Head>
